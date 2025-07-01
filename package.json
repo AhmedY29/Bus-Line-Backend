@@ -6,6 +6,7 @@
     "start": "node dist/app.js",
     "build": "tsc",
     "dev": "nodemon src/app.ts",
+    "render-build": "npm install --production=false && npm install @types/node @types/express @types/mongoose @types/bcrypt @types/jsonwebtoken @types/cors @types/morgan @types/dotenv --save-dev && tsc --skipLibCheck && cp -r src/public dist/public || true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
