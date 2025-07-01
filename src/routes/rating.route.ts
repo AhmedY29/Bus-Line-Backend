@@ -1,13 +1,13 @@
-import { Router } from 'express';
+// import { Router } from 'express';
 
-const router = Router();
+// const router = Router();
 
 
-// Review management
-router.post('/', createReview);
-router.get('/driver/:driverId', getDriverReviews);
-router.get('/:reviewId', getReview);
-router.patch('/:reviewId', updateReview);
-router.delete('/:reviewId', deleteReview);
+// // Review management
+// router.post('/', createReview);
+// router.get('/driver/:driverId', getDriverReviews);
+// router.get('/:reviewId', getReview);
+// router.patch('/:reviewId', updateReview);
+// router.delete('/:reviewId', deleteReview);
 
-export default router;
+// export default router;
