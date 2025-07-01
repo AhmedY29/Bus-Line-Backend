@@ -4,19 +4,19 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/connectDB';
 import helmet from 'helmet';
 import cors from 'cors';
+import http from 'http';
 import morgan from 'morgan';
 import { Server } from 'socket.io';
-import http from 'http';
 
 // Route imports
-// import authRoutes from './routes/auth.route';
+import authRoutes from './routes/auth.route';
+import adminRoutes from './routes/admin.route';
 // import driverRoutes from './routes/driver.route';
 // import busRoutes from './routes/bus.route';
 // import tripRoutes from './routes/trip.route';
 // import bookingRoutes from './routes/booking.route';
 // import trackingRoutes from './routes/tracking.route';
 // import ratingRoutes from './routes/rating.route';
-// import adminRoutes from './routes/admin.route';
 // import chatRoutes from './routes/chat.route';
 
 const app: Express = express();
@@ -49,7 +49,6 @@ app.set('io', io);
 
 dotenv.config();
 
-// Security and logging middleware
 app.use(helmet());
 app.use(cors({
   origin: process.env.CLIENT_URL || '*',
@@ -63,12 +62,12 @@ app.use(morgan('tiny', {
   }
 }));
 
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // API Routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 // app.use('/api/trips', tripRoutes);
 // app.use('/api/bookings', bookingRoutes);
 // app.use('/api/rating', ratingRoutes);
@@ -109,5 +108,6 @@ server.listen(PORT, () => {
   logger.info(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   connectDB()
 });
+
 
 export { app, io };
