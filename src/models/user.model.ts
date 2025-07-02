@@ -5,6 +5,7 @@ export interface UserInterface {
   email: string;
   password: string;
   role: 'student' |'parent' | 'admin';
+  _doc:any
   createdAt: Date;
   updatedAt: Date;
 }

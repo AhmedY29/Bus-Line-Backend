@@ -32,7 +32,7 @@ export const getSignUpService = async (name:string, role:string ,email: string, 
             return{
                 success:true,
                 message:'Created User Successfully',
-                user:{...newUser, password:undefined},
+                user:{...newUser._doc, password:undefined},
                 token
             }
 }
