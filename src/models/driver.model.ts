@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface DriverInterface extends Document {
   name: string;
   email: string;
+  role:string;
   phoneNumber: number;
   licenseNumber: string;
   licenseImage: string;
@@ -25,6 +26,10 @@ const driverSchema = new Schema<DriverInterface>(
     email:{
         type:String,
         required: true
+    },
+    role:{
+      type:String,
+      default:'driver'
     },
     phoneNumber:{
         type:Number,
