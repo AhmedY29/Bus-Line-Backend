@@ -3,18 +3,17 @@ import { Driver } from "../models/driver.model";
 import { User } from "../models/user.model";
 import { generateToken, verifyToken } from "../utils/generateToken";
 import bcrypt from "bcrypt"
+import { AppError } from "../utils/error";
+import { ObjectId } from "mongoose";
 
 
 export const getSignUpService = async (name:string, role:string ,email: string, password:string, ) => {
     const userExist = await User.findOne({ email });
+    const driverExist = await Driver.findOne({ email });
+
     
-            if(userExist){
-                return {
-                    success:false,
-                    error:{
-                        message:"Email Already Exist"
-                    }
-                }
+            if(userExist || driverExist){
+                throw new AppError('Email Already Exist',400)
             }
     
             const HashPass: string = await bcrypt.hash(password, 10) ;
@@ -27,7 +26,7 @@ export const getSignUpService = async (name:string, role:string ,email: string, 
             })
             await newUser.save();
     
-            const token = generateToken(newUser._id)
+            const token = generateToken(newUser._id, newUser.role)
     
             return{
                 success:true,
@@ -43,20 +42,12 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
     const driverAccount = await Driver.findOne({ "bankAccount.accountNumber": accountNumber })
     
             if(userExist || driverExist){
-                return {
-                    success:false,
-                    error:{
-                        message:"Email Already Exist"
-                    }
-                }
+                throw new AppError('Email Already Exist',400)
+
             }
             if(driverAccount){
-                return {
-                    success:false,
-                    error:{
-                        message:"Bank Account Already Exist"
-                    }
-                }
+                throw new AppError('Bank Account Already Exist',400)
+
             }
     
             const HashPass: string = await bcrypt.hash(password, 10) ;
@@ -67,30 +58,38 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
                 accountName
             }
     
-            const newDriver = new Driver({
-                name,
-                email,
-                licenseImage,
-                phoneNumber,
-                password: HashPass,
-                bankAccount
-            })
-            await newDriver.save();
-    
-            const token = generateToken(newDriver._id)
+
+            
 
             const newVehicle = new Vehicle({
                 name:busData.vehicleName,
                 color:busData.vehicleColor,
                 model:busData.vehicleModel,
-                driverId:newDriver._id,
                 capacity:busData.vehicleCapacity,
                 plateNumber:busData.vehiclePlateNumber,
                 yearlyCheck:busData.vehicleYearlyCheck,
             })
 
+            const newDriver = new Driver({
+                name,
+                email,
+                licenseImage,
+                phoneNumber,
+                vehicleId: newVehicle._id,
+                password: HashPass,
+                bankAccount
+            });
+            
+            const token = generateToken(newDriver._id, newDriver.role)
+            await newDriver.save();
+
+
             await newVehicle.save()
-    
+            await Vehicle.findByIdAndUpdate(
+                    newVehicle._id,
+                    { $set: { driverId: newDriver._id } },
+                    { new: true }
+);
             return{
                 success:true,
                 message:'Created Driver and Vehicle Successfully',
@@ -100,21 +99,17 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
 }
 
 export const getSignInService = async (email: string, password:string, ) => {
-    const user = await User.findOne({ email });
-    const driver = await Driver.findOne({ email });
+            const user = await User.findOne({ email });
+            const driver = await Driver.findOne({ email });
 
             if(user){
                 const passCorrect = await bcrypt.compare(password, user.password)
                 if(!passCorrect){
-                    return{
-                        success:false,
-                        error:{
-                            message:"Email or Password Invalid"
-                        }
-                    }
+                    throw new AppError('Email or Password Invalid',400)
+
                 }
     
-                const token = generateToken(user._id)
+                const token = generateToken(user._id, user.role)
                 return{
                     success: true, message:'Logged in successfully',
                     user: user,
@@ -125,15 +120,11 @@ export const getSignInService = async (email: string, password:string, ) => {
             if(driver){
                 const passCorrect = await bcrypt.compare(password, driver.password)
                 if(!passCorrect){
-                    return{
-                        success:false,
-                        error:{
-                            message:"Email or Password Invalid"
-                        }
-                    }
+                    throw new AppError('Email or Password Invalid',400)
+
                 }
     
-                const token = generateToken(driver._id)
+                const token = generateToken(driver._id, driver.role)
                 return{
                     success: true, message:'Logged in successfully',
                     user: driver,
@@ -141,12 +132,8 @@ export const getSignInService = async (email: string, password:string, ) => {
                 }
             }
 
-                return{
-                    success:false,
-                    error:{
-                        message:"Email or Password Invalid"
-                    }
-                }
+                    throw new AppError('Email or Password Invalid',400)
+
             
 }
 

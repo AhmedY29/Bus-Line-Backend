@@ -16,7 +16,7 @@ const vehicleSchema = new Schema({
     model: { type: String, required: true },
     plateNumber: { type: String, required: true },
     capacity: { type: Number, required: true },
-    driverId: { type: mongoose.Types.ObjectId, ref:'Driver', required: true },
+    driverId: { type: mongoose.Types.ObjectId, ref:'Driver'},
     yearlyCheck: { type: Boolean, required: true },
 
 },{

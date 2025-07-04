@@ -22,11 +22,11 @@ export const getUserById = async (userId: string) => {
 
 
   export const getAllDrivers = async () => {
-    return await Driver.find().select('-password');
+    return await Driver.find().select('-password').populate('vehicleId');
   }
 
   export const getDriverById = async (driverId: string) => {
-    return await Driver.findById(driverId).select('-password');
+    return await Driver.findById(driverId).select('-password').populate('vehicleId');
   }
 
   export const updateDriver = async (driverId: string, updateData: any) => {
