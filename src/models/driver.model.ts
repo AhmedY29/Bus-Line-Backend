@@ -1,23 +1,25 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface DriverInterface extends Document {
-  name: string;
-  email: string;
-  role:string;
-  phoneNumber: number;
-  licenseNumber: string;
-  licenseImage: string;
+  name: string,
+  email: string,
+  role:string,
+  phoneNumber: number,
+  licenseNumber: string,
+  licenseImage: string,
+  vehicleId:mongoose.Types.ObjectId,
   bankAccount: {
-    bankName: string;
-    accountNumber: string;
-    accountName?: string;
-  };
+    bankName: string,
+    accountNumber: string,
+    accountName?: string,
+  },
   password:string,
-  status: 'pending' | 'approved' | 'rejected';
-  rating?: number;
+  status: 'pending' | 'approved' | 'rejected',
+  rating?: number,
+  _doc: any
 }
 
-const driverSchema = new Schema<DriverInterface>(
+const driverSchema = new Schema(
   {
     name:{
         type:String,
@@ -43,6 +45,7 @@ const driverSchema = new Schema<DriverInterface>(
       type: String, 
       required: true 
     },
+    vehicleId: { type: mongoose.Types.ObjectId, ref:'Vehicle', required: true },
     bankAccount: {
       bankName: { type: String, required: true},
       accountNumber: { 

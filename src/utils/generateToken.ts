@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-export const generateToken = (userId: any,) => {
-    const token = JWT.sign({userId}, process.env.JWT_SECRET as string)
+export const generateToken = (userId: any, role:string) => {
+    const token = JWT.sign({userId, role}, process.env.JWT_SECRET as string)
 
     return token
 }

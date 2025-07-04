@@ -11,9 +11,10 @@ import { Server } from 'socket.io';
 // Route imports
 import authRoutes from './routes/auth.route';
 import adminRoutes from './routes/admin.route';
+import tripRoutes from './routes/trip.route';
+import destinationRoutes from './routes/destination.route';
 // import driverRoutes from './routes/driver.route';
 // import busRoutes from './routes/bus.route';
-// import tripRoutes from './routes/trip.route';
 // import bookingRoutes from './routes/booking.route';
 // import trackingRoutes from './routes/tracking.route';
 // import ratingRoutes from './routes/rating.route';
@@ -68,7 +69,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-// app.use('/api/trips', tripRoutes);
+app.use('/api/trips', tripRoutes);
+app.use('/api/destination', destinationRoutes);
 // app.use('/api/bookings', bookingRoutes);
 // app.use('/api/rating', ratingRoutes);
 
