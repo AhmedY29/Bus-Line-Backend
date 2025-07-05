@@ -28,6 +28,21 @@ import mongoose from 'mongoose';
             throw error;
         }
     }
+    export const getTripsByDriverIdService = async (driverId: string) => {
+        try {
+            return await Trip.find({driverId: driverId})
+                .populate({
+                    path: 'driverId',
+                    select:"-password",
+                    populate: {
+                    path: 'vehicleId'
+                }
+                })
+                .populate('destinationId');
+        } catch (error) {
+            throw error;
+        }
+    }
 
     export const getTripService = async (tripId: string) => {
         try {
@@ -38,6 +53,7 @@ import mongoose from 'mongoose';
             const trip = await Trip.findById(tripId)
                 .populate({
                     path: 'driverId',
+                    select:'-password',
                     populate: {
                     path: 'vehicleId'
                 },
