@@ -13,11 +13,11 @@ import authRoutes from './routes/auth.route';
 import adminRoutes from './routes/admin.route';
 import tripRoutes from './routes/trip.route';
 import destinationRoutes from './routes/destination.route';
+import bookingRoutes from './routes/booking.route';
+import ratingRoutes from './routes/rating.route';
 // import driverRoutes from './routes/driver.route';
 // import busRoutes from './routes/bus.route';
-// import bookingRoutes from './routes/booking.route';
 // import trackingRoutes from './routes/tracking.route';
-// import ratingRoutes from './routes/rating.route';
 // import chatRoutes from './routes/chat.route';
 
 const app: Express = express();
@@ -71,8 +71,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/destination', destinationRoutes);
-// app.use('/api/bookings', bookingRoutes);
-// app.use('/api/rating', ratingRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/rating', ratingRoutes);
 
 
 

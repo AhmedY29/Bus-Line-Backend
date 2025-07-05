@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { verifyToken } from "../utils/generateToken";
-import { createTripService, deleteTripService, getTripService, getTripsService, updateTripService } from "../services/trip.service";
+import { createTripService, deleteTripService, getTripsByDriverIdService, getTripService, getTripsService, updateTripService } from "../services/trip.service";
 
 
 
@@ -69,7 +69,10 @@ import { createTripService, deleteTripService, getTripService, getTripsService, 
         try {
             const tripId = req.params.tripId;
             const trip = await getTripService(tripId);
-            res.status(200).json(trip);
+            res.status(200).json({
+                success:true,
+                trip
+            });
         } catch (error: any) {
             if (error.message === 'Trip not found') {
                 res.status(404).json({ message: error.message });
@@ -77,6 +80,46 @@ import { createTripService, deleteTripService, getTripService, getTripsService, 
                 res.status(400).json({
                 success:false,
                 message: `Error In Get Trip: ${error.message}`
+            });
+            }
+        }
+    }
+    // Get trips by Driver ID
+    export const getTripsByDriverId = async (req: Request, res: Response) => {
+        const token = req.headers.authorization
+        const verify = verifyToken(token?.split(' ')[1] as string)
+        if(!verify){
+            res.status(401) // UNAUTHORAIZE
+            .json({
+                success:false,
+                error:{
+                    message: 'Unauthorize: You have To Sign In'
+                }
+            })
+            return;
+        }
+        if(verify.role == 'student'){
+            res.status(403)
+            .json({
+                success: false,
+                error:{
+                    message: 'Unauthorize'
+                }
+            })
+        }
+        try {
+            const trips = await getTripsByDriverIdService(verify.userId);
+            res.status(200).json({
+                success: true,
+                trips
+            });
+        } catch (error: any) {
+            if (error.message === 'Trip not found') {
+                res.status(404).json({ message: error.message });
+            } else {
+                res.status(400).json({
+                success:false,
+                message: `Error In Get Driver Trip: ${error.message}`
             });
             }
         }
@@ -99,6 +142,7 @@ import { createTripService, deleteTripService, getTripService, getTripsService, 
         try {
             const tripId = req.params.tripId;
             const updateData = req.body;
+            console.log(verify)
             const updatedTrip = await updateTripService(tripId, verify.userId, verify.role, updateData);
             res.status(200).json(updatedTrip);
         } catch (error: any) {
@@ -125,8 +169,12 @@ import { createTripService, deleteTripService, getTripService, getTripsService, 
         }
         try {
             const tripId = req.params.tripId;
-            const deletedTrip = await deleteTripService(tripId,verify.role, verify.userId);
-            res.status(200).json(deletedTrip);
+            const deletedTrip = await deleteTripService(tripId, verify.userId, verify.role);
+            res.status(200).json({
+                success: true,
+                message:'Trip Deleted Successfully',
+                deletedTrip
+            });
         } catch (error: any) {
             if (error.message === 'Trip not found') {
                 res.status(404).json({ message: error.message });
