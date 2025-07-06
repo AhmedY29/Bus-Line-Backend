@@ -100,6 +100,43 @@ export const getBookingsByStudentIdService = async (userId: string) => {
 };
 
 
+export const driverAcceptBookingService = async (bookingId: string, driverId: string) => {
+  const booking = await Booking.findById(bookingId).populate('tripId', 'driverId');
+  if (!booking) throw new AppError("Booking not found", 404);
+
+  if (booking.status !== "pending") {
+    throw new AppError(`Cannot accept booking with status '${booking.status}'`, 400);
+  }
+
+  const trip: any = booking.tripId;
+  if (trip.driverId.toString() !== driverId) {
+    throw new AppError("You are not the assigned driver for this trip", 403);
+  }
+
+  booking.status = "confirmed";
+  await booking.save();
+  return booking;
+};
+
+export const driverRejectBookingService = async (bookingId: string, driverId: string) => {
+  const booking = await Booking.findById(bookingId).populate('tripId', 'driverId');
+  if (!booking) throw new Error("Booking not found");
+
+  if (booking.status !== "pending") {
+    throw new Error(`Cannot reject booking with status '${booking.status}'`);
+  }
+
+  const trip: any = booking.tripId;
+  if (trip.driverId.toString() !== driverId) {
+    throw new Error("You are not the assigned driver for this trip");
+  }
+
+  booking.status = "rejected";
+  await booking.save();
+  return booking;
+};
+
+
 export const getBookingService = async (bookingId: string) => {
   if (!mongoose.Types.ObjectId.isValid(bookingId)) {
     throw new AppError('Invalid booking ID', 400);

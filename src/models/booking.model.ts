@@ -4,7 +4,7 @@ export interface BookingInterface {
   userId: mongoose.Types.ObjectId;
   tripId: mongoose.Types.ObjectId;
   bookingDate: Date;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  status: 'pending' | 'rejected' | 'confirmed' | 'cancelled' | 'completed';
   subscriptionStart?: Date;
   subscriptionEnd?: Date;
   cancellationReason?: string;
@@ -16,7 +16,7 @@ const BookingSchema = new Schema({
   bookingDate: { type: Date, default: Date.now },
   status: { 
     type: String, 
-    enum: ['pending', 'confirmed', 'cancelled', 'completed'],
+    enum: ['pending', 'rejected', 'confirmed', 'cancelled', 'completed'],
     default: 'pending'
   },
   subscriptionStart: { type: Date },
