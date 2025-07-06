@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BookingInterface } from '../models/booking.model';
-import { cancelBookingService, createBookingService, deleteBookingService, getBookByTripService, getBookingRelatedUserService, getBookingsByDriverIdService, getBookingsByStudentIdService, getBookingService, getBookingsPendingByDriverIdService, getBookingsService, getPassengersByDriverIdService, updateBookingService } from '../services/booking.service';
+import { cancelBookingService, createBookingService, deleteBookingService, driverAcceptBookingService, driverRejectBookingService, getBookByTripService, getBookingRelatedUserService, getBookingsByDriverIdService, getBookingsByStudentIdService, getBookingService, getBookingsPendingByDriverIdService, getBookingsService, getPassengersByDriverIdService, updateBookingService } from '../services/booking.service';
 import { verifyToken } from '../utils/generateToken';
 
 export const createBooking = async (req: Request, res: Response) => {
@@ -160,6 +160,95 @@ export const getBookingsPendingByDriverId = async (req: Request, res: Response) 
     });
   }
 };
+
+export const driverAcceptBooking = async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const verify = verifyToken(token?.split(" ")[1] as string);
+
+  if (!verify) {
+     res.status(401).json({
+      success: false,
+      error: { message: "Unauthorized: You have to sign in" },
+    });
+    return
+  }
+
+  if (verify.role != "driver") {
+     res.status(403).json({
+      success: false,
+      message: "Only drivers can perform this action",
+    });
+    return
+  }
+
+  const { bookingId } = req.params;
+  if (!bookingId) {
+     res.status(400).json({
+      success: false,
+      message: "booking ID is required",
+    });
+    return
+  }
+
+  try {
+    const booking = await driverAcceptBookingService(bookingId, verify.userId);
+    res.status(200).json({
+      success: true,
+      message:'Accepted Booking Successfully',
+      booking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: `Error in accepting booking: ${error.message}`,
+    });
+  }
+};
+
+export const driverRejectBooking = async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const verify = verifyToken(token?.split(" ")[1] as string);
+
+  if (!verify) {
+     res.status(401).json({
+      success: false,
+      error: { message: "Unauthorized: You have to sign in" },
+    });
+    return
+  }
+
+  if (verify.role !== "driver") {
+     res.status(403).json({
+      success: false,
+      message: "Only drivers can perform this action",
+    });
+    return
+  }
+
+  const { bookingId } = req.params;
+  if (!bookingId) {
+     res.status(400).json({
+      success: false,
+      message: "bookingId is required",
+    });
+    return
+  }
+
+  try {
+    const booking = await driverRejectBookingService(bookingId, verify.userId);
+    res.status(200).json({
+      success: true,
+      message:'Rejected Booking Successfully',
+      booking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: `Error in rejecting booking: ${error.message}`,
+    });
+  }
+};
+
 
 export const getBookingsByStudentId = async (req: Request, res: Response) => {
         const token = req.headers.authorization
@@ -330,7 +419,11 @@ export const cancelBooking = async (req: Request, res: Response) => {
       req.params.bookingId,
       req.body.cancellationReason
     );
-    res.status(200).json(booking);
+    res.status(200).json({
+      success:true,
+      message:'Canceled Booking Successfully',
+      booking
+    });
   } catch (error: any) {
     res.status(400).json({
         success: false,
