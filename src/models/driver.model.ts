@@ -7,7 +7,7 @@ export interface DriverInterface extends Document {
   role:string,
   phoneNumber: number,
   licenseNumber: string,
-  licenseImage: string,
+  licenseImage: any,
   vehicleId:mongoose.Types.ObjectId,
   bankAccount: {
     bankName: string,
