@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface TripInterface {
-
+  _id:mongoose.Types.ObjectId,
   tripDateStart: Date,
   tripDateEnd: Date,
   driverId:mongoose.Types.ObjectId,

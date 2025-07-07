@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface DriverInterface extends Document {
+  _id: mongoose.Types.ObjectId,
   name: string,
   email: string,
   role:string,
