@@ -9,7 +9,7 @@ export const createRatingService = async (data: any) => {
 };
 
 export const getDriverRatingsService = async (driverId: string) => {
-  return await Rating.find({ driverId }).populate('userId', "-password");
+  return await Rating.find({ driverId }).populate('driverId', '-password').populate('userId', "-password");
 };
 
 export const getRatingService = async (rateId: string) => {
