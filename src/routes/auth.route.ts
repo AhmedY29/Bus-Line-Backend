@@ -1,4 +1,4 @@
-import { driverSignUp,signUp, signIn, signOut  } from '../controllers/auth.controller';
+import { driverSignUp,signUp, signIn, signOut, editUserData  } from '../controllers/auth.controller';
 import { Router } from 'express';
 
 const router = Router();
@@ -11,6 +11,8 @@ router.post('/signup', signUp);
 
 // Login
 router.post('/signin', signIn);
+
+router.patch('/edit-user', editUserData);
 
 // Logout
 router.post('/signout', signOut);

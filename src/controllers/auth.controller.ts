@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import bcrypt from "bcrypt"
 import { generateToken, verifyToken } from "../utils/generateToken";
-import { getDriverSignUpService, getSignInService, getSignOutService, getSignUpService } from "../services/auth.service";
+import { editUserService, getDriverSignUpService, getSignInService, getSignOutService, getSignUpService } from "../services/auth.service";
 
 
 
@@ -269,6 +269,48 @@ export const signIn = async (req: Request, res: Response) => {
             success:false,
             error:{
                 message:`Error in Sign In: ${error.message}`
+            }
+        })
+    }
+
+}
+
+export const editUserData = async (req: Request, res: Response) => {
+    const tokenHeader = req.headers.authorization;
+        console.log(tokenHeader)
+        if (!tokenHeader) {
+        res.status(401).json({ error: 'Unauthorized: No token provided' });
+        return;
+        }
+        const token = tokenHeader.split(" ")[1]
+        const verify = verifyToken(token)
+
+        console.log(verify)
+
+        if(!verify){
+            res.status(401) // UNAUTHORIZED
+            .json({
+                success: false,
+                error:{
+                    message: 'Token Invalid'
+                }
+            })
+        }
+    try {
+        
+
+        // const header = new Headers({Authorization: `Bearer ${token}`})
+        // res.setHeaders(header)
+        const signInService = await editUserService(verify.userId, req.body)
+    res.status(200) // OK
+    .json(signInService)
+
+    } catch (error: any) {
+        res.status(400)
+        .json({
+            success:false,
+            error:{
+                message:`Error in Edit User: ${error.message}`
             }
         })
     }

@@ -57,15 +57,15 @@ import { createTripService, deleteTripService, getTripsByDriverIdService, getTri
             })
             return;
         }
-        if(verify.role == 'student'){
-            res.status(403)
-            .json({
-                success: false,
-                error:{
-                    message: 'Unauthorize'
-                }
-            })
-        }
+        // if(verify.role == 'student'){
+        //     res.status(403)
+        //     .json({
+        //         success: false,
+        //         error:{
+        //             message: 'Unauthorize'
+        //         }
+        //     })
+        // }
         try {
             const tripId = req.params.tripId;
             const trip = await getTripService(tripId);

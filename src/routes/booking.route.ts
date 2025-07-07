@@ -28,4 +28,5 @@ router.patch('/:bookingId/cancel',cancelBooking);
 router.patch('/:bookingId', updateBooking);
 
 
+
 export default router;

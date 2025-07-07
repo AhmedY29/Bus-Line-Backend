@@ -137,6 +137,34 @@ export const getSignInService = async (email: string, password:string, ) => {
             
 }
 
+export const editUserService = async (userId: string, updateData:any, ) => {
+    console.log(userId, 'serves')
+            const user = await User.findById(userId);
+            const driver = await Driver.findById(userId);
+
+            if(user){
+                const updateUser = await User.findByIdAndUpdate(userId, updateData,{ new: true} )
+    
+                return{
+                    success: true, message:'Update User in successfully',
+                    user: updateUser,
+                }
+            }
+
+            if(driver){
+                const updateUser = await Driver.findByIdAndUpdate(userId, updateData,{ new: true} )
+     
+                return{
+                    success: true, message:'Update Driver in successfully',
+                    user: updateUser,
+                }
+            }
+
+                    throw new AppError('Email or Password Invalid',400)
+
+            
+}
+
 
 
 export const getSignOutService = async () =>{
