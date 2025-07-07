@@ -76,7 +76,7 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
             const newDriver = new Driver({
                 name,
                 email: email.toLowerCase(),
-                licenseImage: cloudinaryLicenseImage,
+                licenseImage: cloudinaryLicenseImage.url,
                 phoneNumber,
                 vehicleId: newVehicle._id,
                 password: HashPass,
