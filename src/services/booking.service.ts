@@ -70,7 +70,8 @@ export const getBookingsPendingByDriverIdService = async (driverId: string) => {
         path: 'driverId',
       },
     })
-    .populate('userId', '-password');
+    .populate('userId', '-password')
+    .populate('destinationId');
 
   const filteredBookings = bookings.filter((booking) => {
     const trip = booking.tripId as any;
