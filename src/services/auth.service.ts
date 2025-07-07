@@ -71,7 +71,7 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
                 yearlyCheck:busData.vehicleYearlyCheck,
             })
 
-            const cloudinaryLicenseImage = cloudinary.uploader.upload(licenseImage)
+            const cloudinaryLicenseImage = await cloudinary.uploader.upload(licenseImage)
             console.log(cloudinaryLicenseImage, 'image url')
             const newDriver = new Driver({
                 name,
