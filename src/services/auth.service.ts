@@ -5,7 +5,7 @@ import { generateToken, verifyToken } from "../utils/generateToken";
 import bcrypt from "bcrypt"
 import { AppError } from "../utils/error";
 import { ObjectId } from "mongoose";
-import cloudinary from "@/config/cloudinary";
+import cloudinary from "../config/cloudinary";
 
 
 export const getSignUpService = async (name:string, role:string ,email: string, password:string, ) => {
