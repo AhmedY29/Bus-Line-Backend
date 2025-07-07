@@ -353,14 +353,14 @@ export const getBookByTrip = async (req: Request, res: Response) => {
             return;
         }
         
-        if(verify.role == 'student' || verify.role == 'parent'){
-            res.status(403)
-            .json({
-                success: false,
-                message: 'Unauthorize'
-            })
-            return
-        }
+        // if(verify.role == 'student' || verify.role == 'parent'){
+        //     res.status(403)
+        //     .json({
+        //         success: false,
+        //         message: 'Unauthorize'
+        //     })
+        //     return
+        // }
   try {
     const bookings = await getBookByTripService(req.params.tripId);
     res.status(200).json(bookings);
