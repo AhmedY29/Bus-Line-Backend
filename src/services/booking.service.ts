@@ -65,13 +65,13 @@ export const getBookingsByDriverIdService = async (driverId: string) => {
 export const getBookingsPendingByDriverIdService = async (driverId: string) => {
   const bookings = await Booking.find()
     .populate({
-      path: 'tripId',
-      populate: {
-        path: 'driverId',
-      },
+        path: 'tripId',
+        populate: [
+        { path: 'driverId' },
+        { path: 'destinationId' }
+        ],
     })
-    .populate('userId', '-password')
-    .populate('destinationId');
+    .populate('userId', '-password');
 
   const filteredBookings = bookings.filter((booking) => {
     const trip = booking.tripId as any;
