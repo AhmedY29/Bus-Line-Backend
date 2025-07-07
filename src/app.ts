@@ -13,6 +13,7 @@ import { verifyToken } from './utils/generateToken';
 import authRoutes from './routes/auth.route';
 import adminRoutes from './routes/admin.route';
 import tripRoutes from './routes/trip.route';
+import ratingRoutes from './routes/rating.route';
 import destinationRoutes from './routes/destination.route';
 import bookingRoutes from './routes/booking.route';
 import messageRoutes from './routes/message.route';
@@ -167,6 +168,7 @@ app.use('/api/trips', tripRoutes);
 app.use('/api/destination', destinationRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/rating', ratingRoutes);
 
 // Health check
 app.get('/', (req: Request, res: Response) => {
