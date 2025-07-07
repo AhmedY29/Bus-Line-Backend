@@ -5,6 +5,7 @@ import { generateToken, verifyToken } from "../utils/generateToken";
 import bcrypt from "bcrypt"
 import { AppError } from "../utils/error";
 import { ObjectId } from "mongoose";
+import cloudinary from "@/config/cloudinary";
 
 
 export const getSignUpService = async (name:string, role:string ,email: string, password:string, ) => {
@@ -20,7 +21,7 @@ export const getSignUpService = async (name:string, role:string ,email: string, 
     
             const newUser = new User({
                 name,
-                email,
+                email: email.toLowerCase(),
                 password: HashPass,
                 role,
             })
@@ -70,10 +71,12 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
                 yearlyCheck:busData.vehicleYearlyCheck,
             })
 
+            const cloudinaryLicenseImage = cloudinary.uploader.upload(licenseImage)
+            console.log(cloudinaryLicenseImage, 'image url')
             const newDriver = new Driver({
                 name,
-                email,
-                licenseImage,
+                email: email.toLowerCase(),
+                licenseImage: cloudinaryLicenseImage,
                 phoneNumber,
                 vehicleId: newVehicle._id,
                 password: HashPass,
