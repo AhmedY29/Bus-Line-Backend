@@ -21,7 +21,7 @@ export const getSignUpService = async (name:string, role:string ,email: string, 
     
             const newUser = new User({
                 name,
-                email,
+                email: email.toLowerCase(),
                 password: HashPass,
                 role,
             })
@@ -75,7 +75,7 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
             console.log(cloudinaryLicenseImage, 'image url')
             const newDriver = new Driver({
                 name,
-                email,
+                email: email.toLowerCase(),
                 licenseImage: cloudinaryLicenseImage,
                 phoneNumber,
                 vehicleId: newVehicle._id,
