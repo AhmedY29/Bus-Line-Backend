@@ -91,14 +91,14 @@ export const getBookingsPendingByDriverIdService = async (driverId: string) => {
 
 export const getBookingsByStudentIdService = async (userId: string) => {
   const bookings = await Booking.find({ userId })
-    .populate('userId', '-password')
     .populate({
-      path: 'tripId',
-    populate: [
+        path: 'tripId',
+        populate: [
         { path: 'driverId' },
         { path: 'destinationId' }
         ],
-    });
+    })
+    .populate('userId', '-password')
 
   return bookings;
 };
