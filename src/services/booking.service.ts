@@ -94,7 +94,10 @@ export const getBookingsByStudentIdService = async (userId: string) => {
     .populate('userId', '-password')
     .populate({
       path: 'tripId',
-      populate: { path: 'driverId' }
+    populate: [
+        { path: 'driverId' },
+        { path: 'destinationId' }
+        ],
     });
 
   return bookings;
