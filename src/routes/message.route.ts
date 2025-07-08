@@ -22,7 +22,7 @@ router.get('/contact', getAvailableContacts);
  * @params tripId (اختياري للسائق-مشرف)
  */
 router.get('/:tripId/:userId', getConversation);
-router.get('/:userId', getConversation);
+router.get('/y/:userId', getConversation);
 
 /**
  * @route POST /api/messages
