@@ -60,7 +60,7 @@ export const signUp = async (req: Request, res: Response) => {
 }
 
 export const driverSignUp = async (req: Request, res: Response) => {
-    const { name, email, password,phoneNumber, licenseImage, bankName, accountNumber, accountName, vehicleName, vehicleColor, vehicleModel, vehicleCapacity, vehiclePlateNumber, vehicleYearlyCheck } = req.body
+    const { name, email, password,phoneNumber, licenseImage, bankName, accountNumber, accountName, vehicleName, vehicleColor, vehicleModel, vehicleCapacity, vehiclePlateNumber, vehicleYearlyCheck, vehicleImage } = req.body
     try {
         if(!name){
             res.status(400) //BAD REQUEST
@@ -192,6 +192,16 @@ export const driverSignUp = async (req: Request, res: Response) => {
             })
             return;
         }
+        if(!vehicleImage ){
+            res.status(400) //BAD REQUEST
+            .json({
+                success:false,
+                error:{
+                    message:'Please Fill vehicle Image Felid!'
+                }
+            })
+            return;
+        }
         if(!vehicleYearlyCheck){
             res.status(400) //BAD REQUEST
             .json({
@@ -209,6 +219,7 @@ export const driverSignUp = async (req: Request, res: Response) => {
             vehicleModel,
             vehicleCapacity,
             vehiclePlateNumber,
+            vehicleImage,
             vehicleYearlyCheck,
         }
 
