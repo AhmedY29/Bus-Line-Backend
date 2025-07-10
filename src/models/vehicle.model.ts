@@ -7,6 +7,7 @@ export interface VehicleInterface {
   plateNumber:string
   capacity:number,
   driverId:mongoose.Types.ObjectId,
+  vehicleImage:string
   yearlyCheck:boolean
 }
 
@@ -17,6 +18,7 @@ const vehicleSchema = new Schema({
     plateNumber: { type: String, required: true },
     capacity: { type: Number, required: true },
     driverId: { type: mongoose.Types.ObjectId, ref:'Driver'},
+    vehicleImage: { type: String},
     yearlyCheck: { type: Boolean, required: true },
 
 },{

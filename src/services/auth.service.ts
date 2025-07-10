@@ -61,15 +61,18 @@ export const getDriverSignUpService = async (name:string, email: string, passwor
     
 
             
-
+            const cloudinaryVehicleLicenseImage = await cloudinary.uploader.upload(busData.vehicleName)
+            const cloudinaryVehicleImage = await cloudinary.uploader.upload(busData.vehicleImage)
             const newVehicle = new Vehicle({
-                name:busData.vehicleName,
+                name:cloudinaryVehicleLicenseImage.url,
                 color:busData.vehicleColor,
                 model:busData.vehicleModel,
                 capacity:busData.vehicleCapacity,
                 plateNumber:busData.vehiclePlateNumber,
+                vehicleImage:cloudinaryVehicleImage.url,
                 yearlyCheck:busData.vehicleYearlyCheck,
             })
+
 
             const cloudinaryLicenseImage = await cloudinary.uploader.upload(licenseImage)
             console.log(cloudinaryLicenseImage, 'image url')

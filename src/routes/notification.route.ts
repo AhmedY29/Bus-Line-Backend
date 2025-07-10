@@ -7,5 +7,6 @@ const router = Router();
 router.get("/", getMyNotifications);
 router.put("/mark/:id", markOneRead);
 router.put("/mark-all", markAllRead);
+router.delete("/:id", markAllRead);
 
 export default router;
